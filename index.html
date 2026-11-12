@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Blog & Field Notes · MisfitMason</title>
+<meta name="description" content="Guides written from real stream sessions, with the numbers and the risk."/>
+<link rel="canonical" href="https://misfitmason.com/index.html"/>
+<meta property="og:title" content="Blog & Field Notes · MisfitMason"/>
+<meta property="og:description" content="Guides written from real stream sessions, with the numbers and the risk."/>
+
+<meta property="og:type" content="website"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="icon" href="assets/favicon.png"/>
+<link rel="alternate" type="application/rss+xml" title="MisfitMason" href="feed.xml"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          display: ['Space Grotesk', 'Inter', 'sans-serif'],
+        },
+        colors: {
+          mason: {
+            bg: '#050607', surface: '#0c0d0f', elevated: '#141619',
+            crimson: '#990f28', crimsonBright: '#e11d48', crimsonGlow: '#fb7185',
+            obsidian: '#08090b', charcoal: '#16181d', slateLight: '#cbd5e1',
+            ink: '#eef2f6', dim: '#94a3b8', line: '#241b1e',
+          }
+        }
+      }
+    }
+  }
+</script>
+<link rel="stylesheet" href="assets/style.css"/>
+</head>
+<body class="antialiased selection:bg-mason-crimsonBright selection:text-white">
+<header class="glass-nav sticky top-0 z-40 border-b border-mason-crimsonBright/20">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+    <a href="index.html" class="flex items-center gap-3 group focus:outline-none">
+      <div class="relative flex items-center justify-center w-9 h-9 rounded-xl bg-mason-elevated border border-mason-crimsonBright/35 overflow-hidden shadow-inner shadow-mason-crimson/30">
+        <img class="h-7 w-7 object-contain transition-transform duration-300 group-hover:scale-110" src="assets/brand-mark.webp" alt="MisfitMason" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+        <span class="hidden items-center justify-center font-display font-bold text-sm text-mason-crimsonBright">MM</span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <span class="font-display font-bold tracking-[0.2em] text-sm sm:text-base text-white">MISFITMASON</span>
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-mason-crimson/35 text-rose-200 border border-mason-crimsonBright/50">
+          <span class="w-1.5 h-1.5 rounded-full bg-mason-crimsonBright animate-pulse"></span>
+          The Blog
+        </span>
+      </div>
+    </a>
+    <nav class="flex items-center gap-1 sm:gap-2 text-sm">
+      <a href="index.html" class="px-3 py-1.5 rounded-lg bg-mason-crimson/30 text-white font-medium border border-mason-crimsonBright/45">Blog</a>
+      <a href="https://misfitmason.com/leaderboards" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-lg text-mason-dim hover:text-white hover:bg-white/5 transition-colors">Leaderboard</a>
+      <a href="https://discord.gg/misfitmason" target="_blank" rel="noopener" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-mason-dim hover:text-rose-300 hover:bg-white/5 transition-colors">
+        Discord
+        <svg class="w-3.5 h-3.5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      </a>
+    </nav>
+  </div>
+</header>
+<main class="max-w-6xl mx-auto px-4 sm:px-6 pt-8 sm:pt-12 pb-16">
+  <section class="relative mb-8 sm:mb-10">
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+      <div class="max-w-2xl">
+        <div class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-mason-crimsonGlow mb-3">
+          <span>Stream Logs &amp; Strategy</span><span class="text-white/25">•</span>
+          <span class="text-slate-300">Vol. 26 · Nov 2026</span>
+        </div>
+        <h1 class="font-display text-3xl sm:text-5xl font-bold tracking-tight text-white leading-[1.12]">
+          Slots, bonus buys &amp; <span class="text-transparent bg-clip-text bg-gradient-to-r from-mason-crimsonBright via-rose-400 to-slate-200">live highlights.</span>
+        </h1>
+        <p class="mt-3.5 text-base sm:text-lg text-mason-dim leading-relaxed">
+          Guides written from real stream sessions: the math, the volatility and the risk, laid out straight.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2" id="topic-filters" aria-label="Filter articles">
+          <button type="button" data-filter="all" class="filter-btn active px-3.5 py-2 rounded-xl text-xs font-semibold bg-mason-crimson text-white border border-mason-crimsonBright/75 shadow-lg shadow-mason-crimson/35 transition-all cursor-pointer">All Guides (4)</button>
+          <button type="button" data-filter="strategy guide" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-mason-obsidian/90 text-slate-300 hover:text-white border border-white/15 transition-all cursor-pointer">Strategy Guide</button>
+          <button type="button" data-filter="evergreen slot" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-mason-obsidian/90 text-slate-300 hover:text-white border border-white/15 transition-all cursor-pointer">Evergreen Slot</button>
+      </div>
+    </div>
+    <div class="editorial-rule mt-7"></div>
+  </section>
+
+  <section class="relative overflow-hidden rounded-2xl border border-mason-crimsonBright/35 bg-gradient-to-r from-[#230910] via-[#0e0d10] to-[#070809] p-5 sm:p-6 mb-10 shadow-xl shadow-mason-crimson/15">
+    <img src="assets/prop-keystone.webp" alt="" aria-hidden="true" class="hidden md:block absolute -right-6 -bottom-8 w-36 h-36 object-contain opacity-25 rotate-12 pointer-events-none select-none"/>
+    <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+      <div class="space-y-1.5 max-w-2xl">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-mason-crimson text-white border border-mason-crimsonBright/60">Roobet Partner</span>
+          <span class="text-xs text-slate-300">Bi-weekly $750 Leaderboard · Monthly Milestones · $100 Raffle</span>
+        </div>
+        <p class="text-sm sm:text-base text-slate-200 leading-relaxed">
+          <strong class="text-white font-semibold">Play with code <span class="text-mason-crimsonGlow">MisfitMason</span></strong> to join the bi-weekly leaderboard ($750 prize pool), monthly milestones and the $100 raffle.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3 shrink-0">
+        <button type="button" onclick="copyReferralCode()" class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-black/80 hover:bg-mason-charcoal text-slate-200 border border-white/15 text-xs font-mono font-semibold transition-all cursor-pointer" title="Copy referral code MisfitMason">
+          <span>CODE: MISFITMASON</span>
+        </button>
+        <a class="btn-prop-bg inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-mason-crimson hover:bg-mason-crimsonBright text-white text-sm font-semibold shadow-lg shadow-mason-crimson/45 border border-rose-400/35 transition-all" href="https://roobet.com/?ref=misfitmason" target="_blank" rel="sponsored noopener">
+          <img src="assets/prop-chip.webp" alt="" aria-hidden="true" class="btn-sprite" onerror="this.style.display='none'"/>
+          <span class="relative z-10">Register with the code</span>
+        </a>
+        <a class="btn-prop-bg inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-black hover:bg-mason-charcoal text-slate-100 text-sm font-semibold border border-white/20 transition-all" href="https://misfitmason.com/leaderboards" target="_blank" rel="noopener">
+          <img src="assets/prop-dice.webp" alt="" aria-hidden="true" class="btn-sprite" onerror="this.style.display='none'"/>
+          <span class="relative z-10">See the standings</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="Latest articles">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-7" id="articles-grid">
+        <article class="blog-card rounded-2xl flex flex-col justify-between group" data-category="strategy guide" data-prop="prop-card.webp" data-prop-size="145">
+          <img src="assets/prop-card.webp" alt="" aria-hidden="true" class="bouncing-prop" onerror="this.style.display='none'"/>
+          <div class="relative z-10 flex flex-col h-full">
+            <a href="posts/slot-volatility-and-bankroll-management.html" class="block relative overflow-hidden aspect-[16/8] bg-[#060708] border-b border-mason-crimsonBright/20" aria-label="Mastering Slot Volatility and Bankroll Management">
+              <img src="assets/covers/slot-volatility-and-bankroll-management.jpg" alt="Mastering Slot Volatility and Bankroll Management" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+            </a>
+            <div class="p-6 flex flex-col flex-1 justify-between gap-5">
+              <div class="space-y-3">
+                <div class="flex flex-wrap items-center gap-2 text-xs text-mason-dim">
+                  <time datetime="2026-11-12" class="font-mono text-slate-400">2026-11-12</time>
+                  <a class="roobet-tag" href="https://roobet.com/?ref=misfitmason" target="_blank" rel="sponsored noopener" title="Play with code MisfitMason"><img src="assets/roobet-coin.png" alt="Roobet coin" width="16" height="16"/></a>
+                  <span class="px-2.5 py-0.5 rounded-full bg-black/70 border border-white/15 text-[11px] text-slate-300">strategy guide</span>
+                </div>
+                <h2 class="font-display text-xl sm:text-2xl font-bold text-white leading-snug group-hover:text-mason-crimsonGlow transition-colors">
+                  <a href="posts/slot-volatility-and-bankroll-management.html">Mastering Slot Volatility and Bankroll Management</a>
+                </h2>
+                <p class="text-sm text-mason-dim leading-relaxed">Understanding Slot Volatility · High vs. Low Volatility · Bankroll Management Strategies</p>
+              </div>
+              <div class="pt-2 flex items-center justify-between border-t border-white/10">
+                <a class="btn-prop-bg inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-mason-crimson/85 hover:bg-mason-crimsonBright text-white text-xs font-semibold border border-rose-400/30 transition-all" href="posts/slot-volatility-and-bankroll-management.html">
+                  <span class="relative z-10">Read the guide →</span>
+                </a>
+                <span class="text-[11px] font-mono uppercase tracking-wider text-slate-500">Guide #01</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="blog-card rounded-2xl flex flex-col justify-between group" data-category="evergreen slot" data-prop="prop-chip.webp" data-prop-size="140">
+          <img src="assets/prop-chip.webp" alt="" aria-hidden="true" class="bouncing-prop" onerror="this.style.display='none'"/>
+          <div class="relative z-10 flex flex-col h-full">
+            <a href="posts/roobet-bonus-code-guide.html" class="block relative overflow-hidden aspect-[16/8] bg-[#060708] border-b border-mason-crimsonBright/20" aria-label="Your Ultimate Guide to Roobet Bonus Codes">
+              <img src="assets/covers/roobet-bonus-code-guide.jpg" alt="Your Ultimate Guide to Roobet Bonus Codes" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+            </a>
+            <div class="p-6 flex flex-col flex-1 justify-between gap-5">
+              <div class="space-y-3">
+                <div class="flex flex-wrap items-center gap-2 text-xs text-mason-dim">
+                  <time datetime="2026-11-12" class="font-mono text-slate-400">2026-11-12</time>
+                  <a class="roobet-tag" href="https://roobet.com/?ref=misfitmason" target="_blank" rel="sponsored noopener" title="Play with code MisfitMason"><img src="assets/roobet-coin.png" alt="Roobet coin" width="16" height="16"/></a>
+                  <span class="px-2.5 py-0.5 rounded-full bg-black/70 border border-white/15 text-[11px] text-slate-300">evergreen slot</span>
+                </div>
+                <h2 class="font-display text-xl sm:text-2xl font-bold text-white leading-snug group-hover:text-mason-crimsonGlow transition-colors">
+                  <a href="posts/roobet-bonus-code-guide.html">Your Ultimate Guide to Roobet Bonus Codes</a>
+                </h2>
+                <p class="text-sm text-mason-dim leading-relaxed">Understanding Roobet Bonus Codes · What is RTP and Why It Matters · Volatility Explained</p>
+              </div>
+              <div class="pt-2 flex items-center justify-between border-t border-white/10">
+                <a class="btn-prop-bg inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-mason-crimson/85 hover:bg-mason-crimsonBright text-white text-xs font-semibold border border-rose-400/30 transition-all" href="posts/roobet-bonus-code-guide.html">
+                  <span class="relative z-10">Read the guide →</span>
+                </a>
+                <span class="text-[11px] font-mono uppercase tracking-wider text-slate-500">Guide #02</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="blog-card rounded-2xl flex flex-col justify-between group" data-category="evergreen slot" data-prop="prop-dice.webp" data-prop-size="145">
+          <img src="assets/prop-dice.webp" alt="" aria-hidden="true" class="bouncing-prop" onerror="this.style.display='none'"/>
+          <div class="relative z-10 flex flex-col h-full">
+            <a href="posts/best-time-to-play-slots-online.html" class="block relative overflow-hidden aspect-[16/8] bg-[#060708] border-b border-mason-crimsonBright/20" aria-label="Best Time to Play Slots Online: A Practical Guide">
+              <img src="assets/covers/best-time-to-play-slots-online.jpg" alt="Best Time to Play Slots Online: A Practical Guide" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+            </a>
+            <div class="p-6 flex flex-col flex-1 justify-between gap-5">
+              <div class="space-y-3">
+                <div class="flex flex-wrap items-center gap-2 text-xs text-mason-dim">
+                  <time datetime="2026-11-12" class="font-mono text-slate-400">2026-11-12</time>
+                  <a class="roobet-tag" href="https://roobet.com/?ref=misfitmason" target="_blank" rel="sponsored noopener" title="Play with code MisfitMason"><img src="assets/roobet-coin.png" alt="Roobet coin" width="16" height="16"/></a>
+                  <span class="px-2.5 py-0.5 rounded-full bg-black/70 border border-white/15 text-[11px] text-slate-300">evergreen slot</span>
+                </div>
+                <h2 class="font-display text-xl sm:text-2xl font-bold text-white leading-snug group-hover:text-mason-crimsonGlow transition-colors">
+                  <a href="posts/best-time-to-play-slots-online.html">Best Time to Play Slots Online: A Practical Guide</a>
+                </h2>
+                <p class="text-sm text-mason-dim leading-relaxed">Understanding RTP and Volatility · Does Timing Really Matter? · Tips for Choosing the Right Slot</p>
+              </div>
+              <div class="pt-2 flex items-center justify-between border-t border-white/10">
+                <a class="btn-prop-bg inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-mason-crimson/85 hover:bg-mason-crimsonBright text-white text-xs font-semibold border border-rose-400/30 transition-all" href="posts/best-time-to-play-slots-online.html">
+                  <span class="relative z-10">Read the guide →</span>
+                </a>
+                <span class="text-[11px] font-mono uppercase tracking-wider text-slate-500">Guide #03</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="blog-card rounded-2xl flex flex-col justify-between group" data-category="strategy guide" data-prop="prop-hat.webp" data-prop-size="155">
+          <img src="assets/prop-hat.webp" alt="" aria-hidden="true" class="bouncing-prop" onerror="this.style.display='none'"/>
+          <div class="relative z-10 flex flex-col h-full">
+            <a href="posts/how-slots-volatility-affects-your-bankroll.html" class="block relative overflow-hidden aspect-[16/8] bg-[#060708] border-b border-mason-crimsonBright/20" aria-label="How Slots Volatility Affects Your Bankroll">
+              <img src="assets/covers/how-slots-volatility-affects-your-bankroll.jpg" alt="How Slots Volatility Affects Your Bankroll" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
+            </a>
+            <div class="p-6 flex flex-col flex-1 justify-between gap-5">
+              <div class="space-y-3">
+                <div class="flex flex-wrap items-center gap-2 text-xs text-mason-dim">
+                  <time datetime="2026-11-12" class="font-mono text-slate-400">2026-11-12</time>
+                  <a class="roobet-tag" href="https://roobet.com/?ref=misfitmason" target="_blank" rel="sponsored noopener" title="Play with code MisfitMason"><img src="assets/roobet-coin.png" alt="Roobet coin" width="16" height="16"/></a>
+                  <span class="px-2.5 py-0.5 rounded-full bg-black/70 border border-white/15 text-[11px] text-slate-300">strategy guide</span>
+                </div>
+                <h2 class="font-display text-xl sm:text-2xl font-bold text-white leading-snug group-hover:text-mason-crimsonGlow transition-colors">
+                  <a href="posts/how-slots-volatility-affects-your-bankroll.html">How Slots Volatility Affects Your Bankroll</a>
+                </h2>
+                <p class="text-sm text-mason-dim leading-relaxed">Understanding Slots Volatility · High vs. Low Volatility: What's the Difference? · Managing Your Bankroll with Volatility in Mind</p>
+              </div>
+              <div class="pt-2 flex items-center justify-between border-t border-white/10">
+                <a class="btn-prop-bg inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-mason-crimson/85 hover:bg-mason-crimsonBright text-white text-xs font-semibold border border-rose-400/30 transition-all" href="posts/how-slots-volatility-affects-your-bankroll.html">
+                  <span class="relative z-10">Read the guide →</span>
+                </a>
+                <span class="text-[11px] font-mono uppercase tracking-wider text-slate-500">Guide #04</span>
+              </div>
+            </div>
+          </div>
+        </article>
+    </div>
+  </section>
+</main>
+<footer class="border-t border-mason-crimsonBright/20 bg-[#040506] text-mason-dim text-xs">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10 space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="flex items-center gap-2.5">
+        <span class="font-display font-bold tracking-[0.2em] text-sm text-white">MISFITMASON</span>
+        <span class="text-mason-crimsonBright">/</span>
+        <span class="text-rose-200/85">Editorial &amp; Stream Guides</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
+        <a href="legal/affiliate-disclosure.html" class="hover:text-mason-crimsonGlow transition-colors">Affiliate disclosure</a>
+        <a href="legal/responsible-gambling.html" class="hover:text-mason-crimsonGlow transition-colors">Responsible gambling</a>
+        <a href="legal/terms.html" class="hover:text-mason-crimsonGlow transition-colors">Terms</a>
+        <a href="feed.xml" class="hover:text-mason-crimsonGlow transition-colors">RSS</a>
+        <a href="sitemap.xml" class="hover:text-mason-crimsonGlow transition-colors">Sitemap</a>
+      </div>
+    </div>
+    <div class="rounded-xl border border-mason-crimsonBright/20 bg-[#110c0e]/90 p-4 leading-relaxed text-slate-400">
+      <strong class="text-white font-semibold">18+.</strong> Gambling involves risk and most players lose money over time. Nothing on this site is a
+      prediction or a promise of winnings — play with code <strong class="text-mason-crimsonGlow font-semibold">MisfitMason</strong> only if you can afford to lose, and
+      never chase losses. Links on this site are affiliate links and we may earn a commission.
+    </div>
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-slate-500">
+      <span>© 2026 MisfitMason · static files, human-approved before publishing.</span>
+      <span>BeGambleAware.org · Play Responsibly</span>
+    </div>
+  </div>
+</footer>
+<div id="toast-msg" class="fixed bottom-5 right-5 z-50 opacity-0 translate-y-3 pointer-events-none px-4 py-2.5 rounded-xl bg-[#1c0a10] border border-mason-crimsonBright/60 text-rose-200 text-xs font-semibold shadow-2xl">Copied code: MisfitMason</div>
+<script>
+(function initCardBouncers() {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cards = document.querySelectorAll('.blog-card');
+  var bouncers = [];
+  var OVERSHOOT = 36;
+  cards.forEach(function (card, i) {
+    var sprite = card.querySelector('.bouncing-prop');
+    if (!sprite) return;
+    var size = parseInt(card.dataset.propSize || '140', 10);
+    sprite.style.width = size + 'px';
+    sprite.style.height = size + 'px';
+    var rect = card.getBoundingClientRect();
+    var cardW = rect.width || 480, cardH = rect.height || 420;
+    var startX = ((i * 137) % Math.max(120, cardW - size * 0.5)) - OVERSHOOT * 0.5;
+    var startY = ((i * 97) % Math.max(120, cardH - size * 0.5)) - OVERSHOOT * 0.5;
+    var angle = (0.55 + i * 0.85) * Math.PI * 0.5;
+    var speed = 0.42 + (i % 3) * 0.08;
+    bouncers.push({ card: card, sprite: sprite, size: size, x: startX, y: startY,
+      vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+      rot: (i * 35) % 360, vRot: (i % 2 === 0 ? 1 : -1) * 0.08, hovered: false });
+    card.addEventListener('mouseenter', function () { bouncers[i].hovered = true; });
+    card.addEventListener('mouseleave', function () { bouncers[i].hovered = false; });
+  });
+  if (reduce) {
+    bouncers.forEach(function (b) { b.sprite.style.transform = 'translate3d(16px,24px,0) rotate(' + b.rot + 'deg)'; });
+    return;
+  }
+  var last = performance.now();
+  function tick(now) {
+    var dt = Math.min((now - last) / 16.667, 2.5); last = now;
+    bouncers.forEach(function (b) {
+      if (b.card.style.display === 'none') return;
+      var w = b.card.offsetWidth, h = b.card.offsetHeight;
+      var minX = -OVERSHOOT, maxX = w - b.size + OVERSHOOT;
+      var minY = -OVERSHOOT, maxY = h - b.size + OVERSHOOT;
+      var boost = b.hovered ? 1.45 : 1.0;
+      b.x += b.vx * boost * dt; b.y += b.vy * boost * dt;
+      b.rot = (b.rot + b.vRot * boost * dt) % 360;
+      if (b.x <= minX) { b.x = minX; b.vx = Math.abs(b.vx); b.vRot = -b.vRot; }
+      else if (b.x >= maxX) { b.x = maxX; b.vx = -Math.abs(b.vx); b.vRot = -b.vRot; }
+      if (b.y <= minY) { b.y = minY; b.vy = Math.abs(b.vy); }
+      else if (b.y >= maxY) { b.y = maxY; b.vy = -Math.abs(b.vy); }
+      b.sprite.style.transform = 'translate3d(' + b.x.toFixed(1) + 'px,' + b.y.toFixed(1) + 'px,0) rotate(' + b.rot.toFixed(2) + 'deg)';
+    });
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+(function initTopicFilters() {
+  var buttons = document.querySelectorAll('.filter-btn');
+  var cards = document.querySelectorAll('.blog-card');
+  var BASE = 'filter-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-mason-obsidian/90 text-slate-300 hover:text-white border border-white/15 transition-all cursor-pointer';
+  var ON = 'filter-btn active px-3.5 py-2 rounded-xl text-xs font-semibold bg-mason-crimson text-white border border-mason-crimsonBright/75 shadow-lg shadow-mason-crimson/35 transition-all cursor-pointer';
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var filter = btn.dataset.filter;
+      buttons.forEach(function (b) { b.className = BASE; });
+      btn.className = ON;
+      cards.forEach(function (card) {
+        var cat = card.dataset.category || '';
+        card.style.display = (filter === 'all' || cat === filter) ? 'flex' : 'none';
+      });
+    });
+  });
+})();
+
+function copyReferralCode() {
+  var text = 'MisfitMason';
+  var input = document.createElement('input');
+  input.value = text;
+  document.body.appendChild(input);
+  input.select();
+  try { document.execCommand('copy'); showToast('Copied code: ' + text); }
+  catch (e) { showToast('Use code: ' + text); }
+  document.body.removeChild(input);
+}
+var toastTimer;
+function showToast(message) {
+  var toast = document.getElementById('toast-msg');
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.remove('opacity-0', 'translate-y-3', 'pointer-events-none');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { toast.classList.add('opacity-0', 'translate-y-3', 'pointer-events-none'); }, 2400);
+}
+</script>
+</body>
+</html>
