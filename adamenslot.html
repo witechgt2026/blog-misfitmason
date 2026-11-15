@@ -1,0 +1,465 @@
+<style>
+  html { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    text-align: left;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: radial-gradient(1200px 800px at 50% -10%, #2b2350 0%, #14121f 55%, #0a0a12 100%);
+    color: #f2efff;
+    min-height: 100vh;
+  }
+  #wrap { max-width: 1060px; margin: 0 auto; padding: 14px 14px 30px; }
+  header.top {
+    display: flex; gap: 12px; align-items: flex-start; justify-content: space-between;
+    flex-wrap: wrap; margin: 6px 0 10px;
+  }
+  h1 { font-size: 20px; margin: 0; letter-spacing: .3px; }
+  h1 span.accent { color: #ffd84d; }
+  p.sub { margin: 6px 0 0; color: #bdb8dd; font-size: 13.5px; line-height: 1.45; max-width: 640px; }
+  .pill {
+    display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: .8px;
+    background: #ffd84d; color: #1a1400; border-radius: 999px; padding: 5px 10px; margin-bottom: 8px;
+  }
+  #stage {
+    position: relative; border-radius: 18px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,.12);
+    background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.35));
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  }
+  #scene { width: 100%; height: min(62vh, 560px); min-height: 380px; display: block; touch-action: none; }
+  #statusBar {
+    position: absolute; left: 12px; top: 12px; max-width: min(78%, 460px);
+    display: flex; gap: 8px; align-items: center;
+    pointer-events: none;
+  }
+  #statusEl {
+    background: rgba(8,8,16,.72); border: 1px solid rgba(255,255,255,.14);
+    backdrop-filter: blur(8px); border-radius: 12px; padding: 8px 12px;
+    font-size: 12.5px; color: #e9e6ff;
+  }
+  #statusEl b { color: #ffd84d; }
+  #controls {
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    margin: 12px 0; padding: 12px;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 14px;
+  }
+  #spinBtn {
+    appearance: none; border: 0; cursor: pointer;
+    font-weight: 900; font-size: 16px; letter-spacing: 1px;
+    color: #1a1400; background: linear-gradient(180deg,#ffe27a,#ffb930);
+    padding: 12px 26px; border-radius: 12px;
+    box-shadow: 0 6px 0 #9a6b00, 0 12px 24px rgba(0,0,0,.4);
+  }
+  #spinBtn:active { transform: translateY(3px); box-shadow: 0 3px 0 #9a6b00; }
+  #spinBtn:disabled { filter: grayscale(.6) brightness(.7); cursor: wait; }
+  .ctl { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #d9d5f2; }
+  .ctl label { font-weight: 700; }
+  select, input[type=range] { accent-color: #ffd84d; }
+  select {
+    background: #1d1a33; color: white; border: 1px solid rgba(255,255,255,.18);
+    border-radius: 8px; padding: 6px 8px; font-size: 13px;
+  }
+  .toggle {
+    display: inline-flex; background: #1d1a33; border: 1px solid rgba(255,255,255,.16);
+    border-radius: 10px; overflow: hidden;
+  }
+  .toggle button {
+    border: 0; background: transparent; color: #bdb8dd; padding: 7px 12px; cursor: pointer; font-weight: 800;
+  }
+  .toggle button.on { background: #ffd84d; color: #1a1400; }
+  #checks {
+    display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 8px; margin-top: 10px;
+  }
+  .check {
+    background: rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 12px; padding: 10px 12px; font-size: 12.5px; line-height: 1.4; color: #cfcbf0;
+  }
+  .check b { color: white; display: block; margin-bottom: 2px; }
+  .legend { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; font-size: 12px; color: #bdb8dd; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: baseline; }
+  small.hint { color: #8f8aae; display: block; margin-top: 8px; line-height: 1.5; }
+</style>
+
+<div id="wrap">
+  <header class="top">
+    <div>
+      <div class="pill">CLIENT CONCEPT DEMO • THREE.JS</div>
+      <h1>Inside-Out Slot — <span class="accent">spins middle → out</span></h1>
+      <p class="sub">
+        Pitch from your mock-up: flat cards (like a book, but not opening like a book).
+        Reels start in the <b>center</b> and roll outward. If a <b>WILD</b> lands, it fills the
+        <b>whole row left-to-right</b>. Drag to orbit. Use this link to ask the client “is this close?”.
+      </p>
+    </div>
+  </header>
+
+  <div id="stage">
+    <canvas id="scene"></canvas>
+    <div id="statusBar"><div id="statusEl">ready — press <b>SPIN</b></div></div>
+  </div>
+
+  <div id="controls">
+    <button id="spinBtn">SPIN</button>
+    <div class="ctl"><label><input type="checkbox" id="forceWildInput" checked> Force WILD demo</label></div>
+    <div class="ctl"><label>Rows</label>
+      <div class="toggle" id="rowsToggle">
+        <button data-rows="4" class="on">4 rows</button>
+        <button data-rows="5">5 rows</button>
+      </div>
+    </div>
+    <div class="ctl"><label>Outward wave</label>
+      <input type="range" id="waveInput" min="60" max="500" value="220" style="width:130px">
+      <span id="waveVal">220ms</span>
+    </div>
+    <div class="ctl"><label>Camera</label>
+      <div class="toggle" id="camToggle">
+        <button data-cam="angle" class="on">3/4 view</button>
+        <button data-cam="flat">Flat</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="checks">
+    <div class="check"><b>1. Inside-out spin</b>Reel 3 starts → then 2+4 → then 1+5. Watch the wave. Landing also settles middle-first.</div>
+    <div class="check"><b>2. Flat book cards</b>Cards are flat planes, flipping on Y like pages. “Flat” toggle proves it: straight-on = pure 2D slot.</div>
+    <div class="check"><b>3. Full-row WILD</b>WILD spreads left ← → right across its whole row with glow + pop. This is the money moment.</div>
+  </div>
+  <div class="legend">
+    <span><i class="dot" style="background:#ffd400"></i>CHICKEN (yellow, from mock-up)</span>
+    <span><i class="dot" style="background:#7a3cff"></i>DARTS (purple, from mock-up)</span>
+    <span><i class="dot" style="background:#111"></i>WILD expands full row</span>
+  </div>
+  <small class="hint">For your client: ask 1) “Is the middle-out wave right?” 2) “Should WILD fill 1 row or all rows?” 3) “4 or 5 rows?” — all three are switchable in this demo, so they can answer fast.</small>
+</div>
+
+<script type="module">
+import * as THREE from "https://esm.sh/three@0.160.0";
+
+const canvas = document.getElementById("scene");
+const statusEl = document.getElementById("statusEl");
+const spinBtn = document.getElementById("spinBtn");
+const forceWildInput = document.getElementById("forceWildInput");
+const waveInput = document.getElementById("waveInput");
+const waveVal = document.getElementById("waveVal");
+
+let COLS = 5;
+let ROWS = 4;
+let camMode = "angle";
+
+const SYMS = [
+  { id:"CHICKEN", bg:"#ffd400", fg:"#1a1400", emoji:"🐔" },
+  { id:"DARTS",   bg:"#7a3cff", fg:"#ffffff", emoji:"🎯" },
+  { id:"SEVEN",   bg:"#ff2e4d", fg:"#ffffff", emoji:"7️⃣" },
+  { id:"BELL",    bg:"#ff8c1a", fg:"#1a1400", emoji:"🔔" },
+  { id:"CHERRY",  bg:"#ff4d88", fg:"#ffffff", emoji:"🍒" },
+  { id:"STAR",    bg:"#00c2a8", fg:"#06251f", emoji:"⭐" },
+  { id:"WILD",    bg:"#0c0c12", fg:"#ffd84d", emoji:"★", wild:true },
+];
+
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(0x0a0a12, 12, 22);
+
+const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
+function fitDist(){ return ROWS===5 ? 12.2 : 10.4; }
+function layoutCamera(){
+  resize();
+  const d = fitDist();
+  if(camMode==="flat"){ camera.position.set(0, 0, d); camera.lookAt(0,0,0); }
+  else { camera.position.set(0.75, 0.95, d*0.98); camera.lookAt(0,-0.1,0); }
+  yaw = 0; pitch = 0.18;
+}
+scene.add(new THREE.AmbientLight(0xffffff, 0.95));
+const key = new THREE.DirectionalLight(0xffffff, 1.4); key.position.set(4,6,8); scene.add(key);
+const rim = new THREE.DirectionalLight(0x7a3cff, 0.8); rim.position.set(-5,3,-4); scene.add(rim);
+const wildLight = new THREE.PointLight(0xffd84d, 0, 12); wildLight.position.set(0,0,2.5); scene.add(wildLight);
+
+const texCache = new Map();
+function symTex(sym){
+  if(texCache.has(sym.id)) return texCache.get(sym.id);
+  const c = document.createElement("canvas"); c.width=256; c.height=344;
+  const g = c.getContext("2d");
+  // bg
+  g.fillStyle = sym.bg; roundRect(g,0,0,256,344,34); g.fill();
+  // inner border
+  g.strokeStyle = sym.wild ? "#ffd84d" : "rgba(0,0,0,.22)"; g.lineWidth = sym.wild?10:6;
+  roundRect(g,10,10,236,324,26); g.stroke();
+  if(sym.wild){
+    g.fillStyle="#ffd84d"; g.font="900 44px system-ui,sans-serif"; g.textAlign="center";
+    g.fillText("WILD",128,86);
+    g.font="120px system-ui"; g.fillText("★",128,220);
+    g.font="900 30px system-ui"; g.fillText("EXPANDS",128,300);
+  } else {
+    g.fillStyle="rgba(0,0,0,.28)"; g.font="800 22px system-ui,sans-serif"; g.textAlign="center";
+    g.fillText("THE",128,48);
+    g.font="130px system-ui"; g.fillText(sym.emoji,128,190);
+    g.fillStyle=sym.fg; g.font="900 34px system-ui,sans-serif";
+    g.fillText(sym.id,128,290);
+  }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy=4;
+  texCache.set(sym.id,t); return t;
+}
+function roundRect(g,x,y,w,h,r){ g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); }
+
+let board = new THREE.Group(); scene.add(board);
+let frameMesh = null;
+let cells = []; // cells[col][row] = {pivot, mesh, mats, sym}
+const CARD_W=1.06, CARD_H=1.42, GAP_X=0.16, GAP_Y=0.16;
+
+function buildBoard(){
+  scene.remove(board);
+  board = new THREE.Group(); scene.add(board);
+  cells = [];
+  const totalW = COLS*CARD_W + (COLS-1)*GAP_X;
+  const totalH = ROWS*CARD_H + (ROWS-1)*GAP_Y;
+  // frame
+  const fg = new THREE.BoxGeometry(totalW+0.55, totalH+0.55, 0.18);
+  const fm = new THREE.MeshStandardMaterial({ color:0x151324, metalness:.6, roughness:.35, emissive:0x7a3cff, emissiveIntensity:.18 });
+  frameMesh = new THREE.Mesh(fg, fm); frameMesh.position.z=-0.16; board.add(frameMesh);
+  // gold trim (simple 4 bars)
+  const trimMat = new THREE.MeshStandardMaterial({ color:0xffd84d, metalness:.9, roughness:.25 });
+  const mkBar=(w,h,x,y)=>{ const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,0.2),trimMat); m.position.set(x,y,-0.14); board.add(m); };
+  mkBar(totalW+0.55,0.07,0, totalH/2+0.27); mkBar(totalW+0.55,0.07,0,-totalH/2-0.27);
+  mkBar(0.07,totalH+0.55, totalW/2+0.27,0); mkBar(0.07,totalH+0.55,-totalW/2-0.27,0);
+
+  const geo = new THREE.BoxGeometry(CARD_W, CARD_H, 0.07);
+  for(let cx=0; cx<COLS; cx++){
+    cells[cx]=[];
+    for(let ry=0; ry<ROWS; ry++){
+      const x = (cx-(COLS-1)/2)*(CARD_W+GAP_X);
+      const y = ((ROWS-1)/2-ry)*(CARD_H+GAP_Y);
+      const pivot = new THREE.Group(); pivot.position.set(x,y,0); board.add(pivot);
+      const sym = randomSym(false);
+      const mats = makeCardMats(sym);
+      const mesh = new THREE.Mesh(geo, mats); pivot.add(mesh);
+      // back spine line to sell "book" feel
+      cells[cx][ry] = { pivot, mesh, mats, sym, x, y, spinPhase:"idle", tumble:0 };
+      setSym(cx,ry,sym,true);
+    }
+  }
+}
+function makeCardMats(sym){
+  const side = new THREE.MeshStandardMaterial({ color:0x2a2440, roughness:.5, metalness:.3 });
+  const back = new THREE.MeshStandardMaterial({ color:0x0e0d1a, roughness:.7 });
+  const front = new THREE.MeshStandardMaterial({ map:symTex(sym), roughness:.45, metalness:.05, emissive:0x000000, emissiveIntensity:1 });
+  // Box order: +x,-x,+y,-y,+z(front),-z(back)
+  return [side,side,side,side,front,back];
+}
+function setSym(cx,ry,sym,instant){
+  const cell = cells[cx][ry]; cell.sym = sym;
+  cell.mats[4].map = symTex(sym); cell.mats[4].needsUpdate = true;
+  cell.mats[4].emissive = new THREE.Color(sym.wild ? 0x664d00 : 0x000000);
+}
+function randomSym(allowWild){
+  if(allowWild && Math.random()<0.09) return SYMS.find(s=>s.id==="WILD");
+  const pool = SYMS.filter(s=>!s.wild);
+  return pool[(Math.random()*pool.length)|0];
+}
+
+// particles for wild
+const PMAX=400;
+const pGeo = new THREE.BufferGeometry();
+const pPos = new Float32Array(PMAX*3); const pVel = new Float32Array(PMAX*3); const pLife = new Float32Array(PMAX);
+pGeo.setAttribute("position", new THREE.BufferAttribute(pPos,3));
+const pMat = new THREE.PointsMaterial({ color:0xffd84d, size:0.09, transparent:true, opacity:.95, depthWrite:false });
+const points = new THREE.Points(pGeo,pMat); points.frustumCulled=false; scene.add(points);
+let pHead=0;
+function burst(x,y,n=40){
+  for(let i=0;i<n;i++){
+    const k=pHead; pHead=(pHead+1)%PMAX;
+    pPos[k*3]=x; pPos[k*3+1]=y; pPos[k*3+2]=0.4;
+    const a=Math.random()*Math.PI*2, sp=1+Math.random()*3;
+    pVel[k*3]=Math.cos(a)*sp; pVel[k*3+1]=Math.sin(a)*sp+1.2; pVel[k*3+2]=(Math.random()-.5)*2;
+    pLife[k]=1;
+  }
+}
+
+function setStatus(html){ statusEl.innerHTML = html; }
+function outDelay(){ return waveInput.value/1000; }
+
+let spinning=false;
+async function spin(){
+  if(spinning) return; spinning=true; spinBtn.disabled=true;
+  wildLight.intensity=0;
+  const od = outDelay();
+  const now = performance.now()/1000;
+  // assign per-column timing: middle-out
+  const colInfo=[];
+  for(let c=0;c<COLS;c++){
+    const dist=Math.abs(c-(COLS-1)/2);
+    colInfo[c]={ dist, start:now+dist*od, stop:now+dist*od+1.15+dist*0.22+Math.random()*0.25, final:[] };
+    for(let r=0;r<ROWS;r++) colInfo[c].final[r]=randomSym(true);
+  }
+  if(forceWildInput.checked){
+    // guarantee at least one wild: center-ish
+    const wr=(Math.random()*ROWS)|0;
+    const wc=1+((Math.random()*3)|0);
+    colInfo[wc].final[wr]=SYMS.find(s=>s.id==="WILD");
+    colInfo._forceRow=wr;
+  }
+  const midRow=(ROWS-1)/2;
+  setStatus(`spinning from the <b>middle out</b> — reel 3 → 2+4 → 1+5 …`);
+  // run loop until all landed
+  await new Promise(resolve=>{
+    const tick=()=>{
+      const t=performance.now()/1000;
+      let allDone=true;
+      for(let c=0;c<COLS;c++){
+        const info=colInfo[c];
+        for(let r=0;r<ROWS;r++){
+          const cell=cells[c][r];
+          const rowDist=Math.abs(r-midRow);
+          const landAt=info.stop+rowDist*0.09;
+          if(t<info.start){ allDone=false; continue; }
+          if(t<info.stop){
+            allDone=false;
+            // tumbling = spinning flat cards
+            cell.pivot.rotation.x += 0.32;
+            cell.pivot.rotation.y = Math.sin(t*7+c)*0.12;
+            if(Math.random()<0.35) setSym(c,r,randomSym(false));
+          } else if(t<landAt+0.45){
+            allDone=false;
+            // settle X then book-flip Y: -1.6rad -> 0
+            const k=Math.min(1,Math.max(0,(t-landAt)/0.45));
+            if(k<0.25){
+              // snap X flat
+              cell.pivot.rotation.x *= 0.7;
+            } else {
+              if(!cell._landed){
+                cell._landed=true;
+                setSym(c,r,info.final[r]);
+                cell.pivot.rotation.x=0;
+                cell.pivot.rotation.y=-1.65;
+                cell.pivot.scale.setScalar(1.12);
+              }
+              const e=1-Math.pow(1-(k-0.25)/0.75,3);
+              cell.pivot.rotation.y=-1.65*(1-e);
+              cell.pivot.scale.setScalar(1.12-0.12*e);
+            }
+          } else {
+            cell.pivot.rotation.set(0,0,0); cell.pivot.scale.setScalar(1);
+            cell._landed=false;
+          }
+        }
+      }
+      if(!allDone) requestAnimationFrame(tick); else resolve();
+    };
+    tick();
+  });
+
+  // wild check
+  let wildRow=-1, wildCol=-1;
+  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++) if(cells[c][r].sym.wild){ wildRow=r; wildCol=c; break; }
+  if(wildRow>=0){
+    await expandWild(wildRow, wildCol);
+  } else {
+    setStatus(`no wild this spin — press <b>SPIN</b> again (or keep Force WILD on)`);
+  }
+  spinning=false; spinBtn.disabled=false;
+}
+
+async function expandWild(row, originCol){
+  setStatus(`<b>WILD</b> on row ${row+1} — expanding <b>full row left ↔ right</b> …`);
+  wildLight.intensity=2.2;
+  // order outward from origin
+  const order=[...Array(COLS).keys()].sort((a,b)=>Math.abs(a-originCol)-Math.abs(b-originCol));
+  for(const c of order){
+    const cell=cells[c][row];
+    const d=Math.abs(c-originCol);
+    // flip to wild at 90deg
+    await new Promise(res=>{
+      const dur=0.34; const t0=performance.now();
+      const step=()=>{
+        const k=Math.min(1,(performance.now()-t0)/(dur*1000));
+        cell.pivot.rotation.y = -Math.PI/2 * Math.sin(k*Math.PI/2) * -1; // 0 -> -90deg
+        cell.pivot.rotation.y = -1.57*(1-k*0.2); // simpler: tilt
+        if(k>=1){
+          setSym(c,row,SYMS.find(s=>s.id==="WILD"));
+          // open back to 0 with pop
+          const t1=performance.now();
+          const open=()=>{
+            const k2=Math.min(1,(performance.now()-t1)/300);
+            const e=1-Math.pow(1-k2,3);
+            cell.pivot.rotation.y=-1.57*(1-e);
+            cell.pivot.scale.setScalar(1+0.3*Math.sin(k2*Math.PI));
+            cell.mats[4].emissiveIntensity = 1+k2*1.6;
+            if(k2<1) requestAnimationFrame(open); else { cell.pivot.rotation.y=0; cell.pivot.scale.setScalar(1); res(); }
+          };
+          open();
+        } else requestAnimationFrame(step);
+      };
+      step();
+    });
+    burst(cell.x, cell.y, 34);
+    wildLight.position.set(cell.x, cell.y, 2.2);
+    await new Promise(r=>setTimeout(r, outDelay()*550));
+  }
+  // flash row
+  for(let i=0;i<3;i++){ wildLight.intensity=3; await new Promise(r=>setTimeout(r,90)); wildLight.intensity=1.2; await new Promise(r=>setTimeout(r,90)); }
+  wildLight.intensity=1.4;
+  setStatus(`★ <b>WILD fills row ${row+1} left-to-right</b> — is this the effect your client meant?`);
+}
+
+// orbit drag (simple, no lib)
+let dragging=false, px=0, py=0, yaw=0, pitch=0.18;
+canvas.addEventListener("pointerdown",e=>{dragging=true;px=e.clientX;py=e.clientY;canvas.setPointerCapture(e.pointerId);});
+addEventListener("pointerup",()=>dragging=false);
+addEventListener("pointermove",e=>{
+  if(!dragging) return;
+  yaw += (e.clientX-px)*0.005; pitch = Math.max(-0.2,Math.min(0.9,pitch+(e.clientY-py)*0.003));
+  px=e.clientX; py=e.clientY;
+});
+
+function resize(){
+  const w=canvas.clientWidth||canvas.parentElement.clientWidth, h=canvas.clientHeight||400;
+  renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
+}
+addEventListener("resize",()=>layoutCamera());
+
+// UI wiring
+waveInput.addEventListener("input",()=>waveVal.textContent=waveInput.value+"ms");
+spinBtn.onclick=()=>spin();
+document.querySelectorAll("#rowsToggle button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("#rowsToggle button").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on"); ROWS=+b.dataset.rows; buildBoard();
+  layoutCamera();
+});
+document.querySelectorAll("#camToggle button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("#camToggle button").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on"); camMode=b.dataset.cam;
+  layoutCamera();
+});
+
+buildBoard();
+layoutCamera();
+
+// main loop
+const clock=new THREE.Clock();
+function loop(){
+  requestAnimationFrame(loop);
+  const dt=Math.min(0.05,clock.getDelta());
+  // camera orbit around base (gentle, keeps full board framed)
+  const d = fitDist();
+  const base = camMode==="flat" ? new THREE.Vector3(0,0,d) : new THREE.Vector3(0.75,0.95,d*0.98);
+  const target = new THREE.Vector3(base.x+Math.sin(yaw)*2.4, base.y+pitch*1.6, base.z-Math.abs(Math.sin(yaw))*0.9);
+  camera.position.lerp(target, 0.08);
+  camera.lookAt(0,-0.1,0);
+  frameMesh.material.emissiveIntensity = 0.16+Math.sin(performance.now()*0.002)*0.06;
+  // particles
+  for(let i=0;i<PMAX;i++){
+    if(pLife[i]<=0) continue;
+    pLife[i]-=dt*0.9;
+    pPos[i*3]+=pVel[i*3]*dt; pPos[i*3+1]+=pVel[i*3+1]*dt; pPos[i*3+2]+=pVel[i*3+2]*dt;
+    pVel[i*3+1]-=3.5*dt;
+    if(pLife[i]<=0){ pPos[i*3+1]=-99; }
+  }
+  pGeo.attributes.position.needsUpdate=true;
+  renderer.render(scene,camera);
+}
+loop();
+setTimeout(()=>{ if(!spinning) spin(); }, 900);
+</script>
